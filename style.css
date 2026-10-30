@@ -66,3 +66,5 @@ footer{font-size:15px}footer p{line-height:1.7}footer small{color:#ccbdd7;font-s
 .core-value-top{align-items:center;gap:18px;flex-wrap:wrap}.core-value-top .official-icon{width:120px;height:120px;padding:12px}.core-value-top .official-icon img{width:96px;height:96px}.values-grid .core-value-top h3{margin:0;flex:1 1 130px;font-size:27px;line-height:1.25}.core-value-top .official-icon img{filter:none}@media(max-width:650px){.core-value-top .official-icon{width:100px;height:100px}.core-value-top .official-icon img{width:80px;height:80px}.values-grid .core-value-top h3{font-size:25px}}
 
 .core-value-top .value-original{background-image:url('assets/fll/core-values-reference.png');background-size:321% 220%;background-position:var(--value-x) var(--value-y);background-repeat:no-repeat;border-radius:0;padding:0;background-color:#ed1523}
+
+.core-value-top .turtle-value{background:transparent;padding:0;border-radius:0}.core-value-top .turtle-value img{width:120px;height:120px;max-width:100%;object-fit:contain}@media(max-width:650px){.core-value-top .turtle-value img{width:100px;height:100px}}
