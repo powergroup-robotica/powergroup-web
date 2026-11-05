@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TariGuard · Guía de conexiones</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0e1916;color:#f3f5e8;font:16px/1.5 system-ui,sans-serif}
+main{max-width:880px;margin:auto;padding:clamp(16px,5vw,48px)}
+header p{letter-spacing:.13em;color:#a4e2b4;font-size:.8rem;font-weight:750}
+h1{font-size:clamp(2rem,6vw,3.8rem);line-height:1.05;margin:.2em 0 .5em}
+h2{margin:0;font-size:1.4rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 16px}
+button{font:inherit;border:1px solid #507362;background:#172822;color:inherit;border-radius:9px;padding:.45em .75em;cursor:pointer}
+button[aria-pressed=true]{background:#a4e2b4;color:#10221a;font-weight:750}
+button:focus-visible{outline:3px solid #ffd78e;outline-offset:3px}
+section{border:1px solid #38584b;background:#15241e;border-radius:14px;padding:clamp(12px,3vw,24px)}
+svg{display:block;width:100%;height:auto;margin-top:14px}
+svg text{fill:#f3f5e8;font:650 16px system-ui}
+svg .board{fill:#213b30;stroke:#507362}
+svg .part text{font:700 9px monospace}
+svg .part{filter:drop-shadow(0 5px 4px #08130f)}
+svg .wire{fill:none;stroke-width:3;stroke-linecap:round}
+svg .pulse{fill:none;stroke:#fff;stroke-width:4;stroke-dasharray:9 200;animation:trace .95s ease-out both}
+@keyframes trace{from{stroke-dashoffset:190}to{stroke-dashoffset:0;opacity:0}}
+@media(prefers-reduced-motion:reduce){svg .pulse{display:none}}
+.detail{color:#c6e5d0;margin-bottom:0}
+.subtle{color:#c0d3c7;font-size:.88rem}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.step{font-size:.85rem;color:#a4e2b4;font-variant-numeric:tabular-nums}
+.sim{margin-top:20px;display:grid;gap:12px}
+.sim input{width:100%;accent-color:#a4e2b4}
+.lcd{display:block;background:#c6e88a;color:#15290f;padding:12px 18px;border:5px solid #286048;border-radius:6px;white-space:pre;font:700 clamp(.8rem,3.5vw,1.05rem)/1.5 monospace;width:fit-content;max-width:100%;margin:0}
+.escena{margin:20px 0 32px;background:#182e24}
+.escena svg{border-radius:10px;background:#b6dbad}
+.escena .paisaje text{font:750 14px system-ui;fill:#12271e}
+.escena .paisaje .etiqueta{fill:#f9edc9;stroke:#624b31}
+.escena #nivel{transition:transform .55s ease}
+.escena #soporte{transform-origin:441px 177px;transition:transform .55s ease}
+.escena #lluvia{opacity:0;transition:opacity .3s}
+.escena #lluvia.activa{opacity:.75;animation:gotas .72s linear infinite}
+.escena #invasion-nido[hidden]{display:none}
+.escena #invasion-nido:not([hidden]) ellipse{animation:marcar-nido .8s ease-out}
+@keyframes marcar-nido{from{stroke-width:9;opacity:.45}to{stroke-width:3;opacity:1}}
+@keyframes gotas{from{transform:translate(0,-13px)}to{transform:translate(-8px,12px)}}
+.sim-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:start}
+.sim-grid label{display:block;margin-bottom:4px}
+.pantalla h3{font-size:.88rem;letter-spacing:.08em;margin:0 0 8px;color:#b4e6bd}
+.estado{min-height:3em;margin:8px 0 0;color:#d1ead5}
+@media(max-width:560px){.sim-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.escena #nivel,.escena #soporte,.escena #lluvia{transition:none}.escena #lluvia.activa{animation:none}}
+@media(prefers-reduced-motion:reduce){.escena #invasion-nido:not([hidden]) ellipse{animation:none}}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.85rem;margin:12px 0}
+.legend span::before{content:"";display:inline-block;width:14px;height:3px;margin-right:6px;vertical-align:middle;background:var(--color)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media print{body{background:#fff;color:#13271d}section,button{border-color:#666}.detail,header p{color:#13271d}button:not([aria-pressed=true]){display:none}}
+</style>
+<main>
+<header><p>POWER GROUP · TARIGUARD</p><h1>Guía de conexiones</h1></header>
+<p>Explora cómo TariGuard responde a cambios cerca de un nido de taricaya y luego revisa cómo conectar el prototipo.</p>
+<section class="sim escena" aria-labelledby="titulo-sim">
+  <div><div class="step">01 · SIMULACIÓN</div><h2 id="titulo-sim">Un nido en la ribera amazónica</h2></div>
+  <svg class="paisaje" viewBox="0 0 720 290" role="img" aria-labelledby="ribera-titulo ribera-desc">
+    <title id="ribera-titulo">Playa amazónica con un nido y sensores TariGuard</title>
+    <desc id="ribera-desc">La escena muestra cambios de agua e inclinación y señala una invasión simulada de origen indeterminado.</desc>
+    <defs>
+      <linearGradient id="cielo" x2="0" y2="1"><stop stop-color="#a8d9c7"/><stop offset="1" stop-color="#f1e0a7"/></linearGradient>
+      <linearGradient id="rio" x2="0" y2="1"><stop stop-color="#55c3bd" stop-opacity=".8"/><stop offset="1" stop-color="#237e83" stop-opacity=".94"/></linearGradient>
+      <clipPath id="borde-escena"><rect width="720" height="290" rx="10"/></clipPath>
+    </defs>
+    <g clip-path="url(#borde-escena)">
+      <rect width="720" height="290" fill="url(#cielo)"/>
+      <circle cx="565" cy="52" r="32" fill="#ffe5a2"/>
+      <path d="M0 121Q79 18 190 94T350 108Q453 53 580 96T720 78V195H0Z" fill="#519173"/>
+      <path d="M0 104Q36 53 64 83Q102 20 137 87Q175 43 204 102Q241 67 286 119L298 180H0Z" fill="#286552"/>
+      <path d="M720 69Q691 42 665 89Q638 53 609 93Q581 71 542 115L520 174H720Z" fill="#286552"/>
+      <path d="M0 193Q161 157 319 159Q485 154 720 187V290H0Z" fill="#debc83"/>
+      <path d="M0 217Q154 175 301 191Q428 179 720 211V290H0Z" fill="#bd8e62"/>
+      <path d="M0 259Q179 204 294 223Q498 211 720 246V290H0Z" fill="#a57450"/>
+      <path d="M267 198Q313 182 359 198L345 246Q313 270 282 245Z" fill="#76503a" stroke="#e6bc84" stroke-width="3"/>
+      <g fill="#f9edcf" stroke="#b9a47e" stroke-width="2"><ellipse cx="302" cy="231" rx="10" ry="12"/><ellipse cx="325" cy="227" rx="11" ry="13"/><ellipse cx="320" cy="245" rx="10" ry="11"/></g>
+      <g transform="translate(152 168)" stroke="#244837" stroke-width="2">
+        <path d="M-23 2l-16 9m25 0l-10 13m28-11l11 9m1-21l14 4" stroke="#567246" stroke-width="7" stroke-linecap="round"/>
+        <ellipse rx="31" ry="18" fill="#657d48"/><path d="M-18-8L0-13L16-4L10 10L-8 12Z M0-13L4-17M16-4L30-2M10 10L16 15M-8 12L-18 15M-18-8L-26-10" fill="none"/>
+        <ellipse cx="35" cy="-6" rx="9" ry="6" fill="#7d9151"/><circle cx="39" cy="-8" r="1.5" fill="#142c1d"/>
+      </g>
+      <g id="nivel"><path d="M0 260Q36 247 72 258T144 258T216 258L240 270V460H0Z" fill="url(#rio)"/><path d="M0 260Q36 247 72 258T144 258T216 258" fill="none" stroke="#cdf6dc" stroke-width="3"/></g>
+      <g stroke="#795139" stroke-width="2" fill="none"><path d="M205 205V231M313 179v14M469 144v15"/></g>
+      <g><rect class="etiqueta" x="158" y="186" width="94" height="22" rx="8"/><text x="205" y="202" text-anchor="middle">Sonda YL-69</text><path d="M199 211v31m10-31v31" stroke="#3a5448" stroke-width="5" stroke-linecap="round"/><path d="M199 234v8m10-8v8" stroke="#ffe198" stroke-width="3"/></g>
+      <g><rect class="etiqueta" x="263" y="158" width="100" height="23" rx="8"/><text x="313" y="174" text-anchor="middle">Nido ilustrado</text></g>
+      <g id="soporte"><path d="M400 177h115" stroke="#654830" stroke-width="8" stroke-linecap="round"/><rect x="428" y="151" width="57" height="23" rx="5" fill="#253d36"/><circle cx="455" cy="162" r="4" fill="#ffc667"/><circle cx="475" cy="162" r="3" fill="#b9dd9b"/></g>
+      <g><rect class="etiqueta" x="432" y="121" width="78" height="23" rx="8"/><text x="471" y="137" text-anchor="middle">micro:bit</text></g>
+      <path id="lluvia" d="M64 41l-13 25m72-31l-13 25m77-18l-13 25m77-38l-13 25m77-18l-13 25m77-40l-13 25m77-11l-13 25m77-33l-13 25m77-12l-13 25m77-31l-13 25m77-16l-13 25M101 102l-13 25m131-40l-13 25m131-21l-13 25m131-29l-13 25m131-12l-13 25m131-37l-13 25" stroke="#efffff" stroke-width="3" stroke-linecap="round"/>
+      <g id="invasion-nido" hidden>
+        <ellipse cx="314" cy="225" rx="54" ry="41" fill="none" stroke="#ffdf83" stroke-width="3" stroke-dasharray="6 4"/>
+        <rect x="263" y="158" width="100" height="23" rx="8" fill="#ffdf83" stroke="#694b20"/>
+        <text x="313" y="174" text-anchor="middle">Invasión</text>
+      </g>
+    </g>
+  </svg>
+  <div class="toolbar" aria-label="Situaciones de prueba">
+    <button type="button" data-escena="seca">Playa seca</button>
+    <button type="button" data-escena="lluvia">Lluvia</button>
+    <button type="button" data-escena="crecida">Crecida</button>
+    <button type="button" data-escena="inclinacion">Desnivel</button>
+    <button type="button" data-escena="invasion">Invasión</button>
+  </div>
+  <div class="sim-grid">
+    <div>
+      <label for="agua">Contacto de la sonda con el agua</label>
+      <input id="agua" type="range" min="0" max="100" value="0">
+      <label for="angulo-demo">Inclinación de la base</label>
+      <input id="angulo-demo" type="range" min="0" max="25" value="0">
+      <p class="estado" id="estado-demo" aria-live="polite"></p>
+    </div>
+    <div class="pantalla"><h3>LCD1602 · SIMULACIÓN</h3><output id="lcd-demo" class="lcd" for="agua angulo-demo"></output></div>
+  </div>
+  <p class="subtle">Escena didáctica. El índice 0–100 representa la respuesta relativa de una sonda calibrada. La altura del río y los valores son ilustrativos y no corresponden a umbrales de riesgo para el nido.</p>
+</section>
+<div class="step">02 · MONTAJE</div>
+<nav id="modulos" aria-label="Módulos"></nav>
+<section aria-labelledby="titulo">
+  <div class="step" id="paso"></div>
+  <h2 id="titulo"></h2>
+  <div class="toolbar">
+    <button id="anterior" type="button">← Anterior</button>
+    <button id="siguiente" type="button">Siguiente →</button>
+    <button id="animar" type="button">Repetir animación</button>
+  </div>
+  <svg id="esquema" role="img" aria-labelledby="titulo cables"></svg>
+  <div id="cables" class="sr"></div>
+  <div class="legend" aria-label="Leyenda">
+    <span style="--color:#ffaf91">Alimentación</span>
+    <span style="--color:#bdc7c2">Tierra</span>
+    <span style="--color:#8eddf7">Datos</span>
+    <span style="--color:#e1c1ff">Reloj</span>
+  </div>
+  <p class="detail" id="detalle"></p>
+  <p class="subtle">Ilustraciones orientativas. Identifica cada pin por la etiqueta de tu módulo.</p>
+</section>
+</main>
+<script>
+const modulos = [
+  {titulo:'Enlace entre placas', boton:'Enlace', izq:'micro:bit', der:'Arduino UNO',
+   filas:[['P0 · TX','D10 · RX','datos'],['GND','GND','tierra']],
+   detalle:'Cada placa se alimenta por su propio USB. Une las tierras. Deja D11 sin conectar y mantén separados los 5 V del UNO y los 3 V de la micro:bit.'},
+  {titulo:'Sonda de agua YL-69', boton:'Agua', izq:'Módulo LM393', der:'micro:bit',
+   filas:[['AO','P2','datos'],['VCC','3V','energia'],['GND','GND','tierra']],
+   detalle:'La sonda YL-69 se conecta al conector de dos pines del LM393. Usa este esquema con un módulo que funcione a 3 V. Deja DO libre y mantén el módulo fuera del agua.'},
+  {titulo:'Temperatura del sustrato', boton:'DS18B20', izq:'DS18B20', der:'Arduino UNO',
+   filas:[['DQ · DATA','D2','datos'],['VDD','5V','energia'],['GND','GND','tierra']],
+   puente:{a:0,b:1,valor:'4,7 kΩ'},
+   detalle:'La resistencia de 4,7 kΩ une D2/DATA con 5 V. Si el módulo ya incorpora esa resistencia, usa la que trae.'},
+  {titulo:'Temperatura y humedad del aire', boton:'DHT22', izq:'DHT22', der:'Arduino UNO',
+   filas:[['DATA','D4','datos'],['VCC','5V','energia'],['GND','GND','tierra']],
+   puente:{a:0,b:1,valor:'10 kΩ'},
+   detalle:'Si usas el DHT22 suelto, agrega la resistencia de 10 kΩ entre DATA y VCC. Si el módulo ya la incorpora, usa la que trae.'},
+  {titulo:'Pantalla de ambiente y sustrato', boton:'OLED', izq:'OLED SSD1306', der:'Arduino UNO',
+   filas:[['SDA','A4','datos'],['SCK · SCL','A5','reloj'],['VDD','Alimentación*','energia'],['GND','GND','tierra']],
+   detalle:'*Conserva la alimentación del OLED que ya tienes funcionando. El voltaje de VDD depende del módulo. En tu pantalla, SCK es el reloj I²C.'},
+  {titulo:'Pantalla de ángulo y agua', boton:'LCD1602', izq:'LCD1602 I²C', der:'Arduino UNO',
+   filas:[['SDA','D9','datos'],['SCL','D8','reloj'],['VCC','5V','energia'],['GND','GND','tierra']],
+   detalle:'Usa los cuatro pines del adaptador I²C que va detrás del LCD. El programa asigna SDA a D9 y SCL a D8.'}
+];
+const colores = {energia:'#ffaf91',tierra:'#bdc7c2',datos:'#8eddf7',reloj:'#e1c1ff'};
+// Ilustraciones propias: la ubicación física de los pines varía entre módulos.
+const rect = (x,y,w,h,color,r=2) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${color}"/>`;
+const dot = (x,y,r,color) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${color}"/>`;
+const rotulo = (x,y,t) => `<text x="${x}" y="${y}">${t}</text>`;
+const filaPines = (cantidad,x,y,paso,color) => Array.from({length:cantidad},(_,i)=>dot(x+i*paso,y,2.3,color)).join('');
+const oro='#e9bf65', chip='#172125', plata='#aebfbd', blanco='#dae7e5';
+const partes = {
+  'Arduino UNO': rect(12,9,100,62,'#087b91',5)+rect(3,22,24,17,plata)+rect(6,47,21,15,chip)+
+    rect(34,13,69,7,chip)+filaPines(12,38,16,5.4,oro)+rect(42,60,61,7,chip)+filaPines(10,46,63,5.7,oro)+
+    rect(47,42,42,11,chip)+rect(31,29,10,16,plata)+dot(104,27,3,oro)+rotulo(57,34,'UNO'),
+  'micro:bit': rect(16,6,90,69,'#273332',7)+rect(19,23,15,14,plata)+rect(88,23,15,14,plata)+
+    Array.from({length:25},(_,i)=>dot(46+(i%5)*7,18+Math.floor(i/5)*7,2.5,i%6===0?'#ff8a78':'#563b3d')).join('')+
+    Array.from({length:5},(_,i)=>rect(24+i*16,58,10,17,oro)+dot(29+i*16,68,2.5,chip)).join(''),
+  'Módulo LM393': rect(12,29,53,26,'#15769a')+rect(31,35,15,12,chip)+dot(54,40,5,'#3060ae')+
+    rect(6,34,8,17,plata)+rect(65,36,16,4,oro)+rect(65,45,16,4,oro)+rect(78,29,11,27,'#937143')+
+    rect(87,31,28,5,oro)+rect(87,49,28,5,oro),
+  'DS18B20': rect(13,32,58,15,plata,7)+rect(64,32,15,15,chip)+
+    `<path d="M78 35h35M78 40h35M78 45h35" fill="none" stroke="${oro}" stroke-width="2"/>`,
+  'DHT22': rect(34,9,51,53,'#c8d8d8',5)+Array.from({length:7},(_,i)=>rect(41,14+i*6,37,3,'#667b7c')).join('')+
+    Array.from({length:4},(_,i)=>rect(43+i*10,62,3,11,oro)).join(''),
+  'OLED SSD1306': rect(24,6,73,66,'#116b98',5)+rect(29,22,63,42,chip)+filaPines(4,45,13,10,oro)+
+    dot(30,12,3,plata)+dot(90,12,3,plata)+rotulo(35,36,'TARIGUARD')+rect(36,43,38,2,'#6ed7ff')+rect(36,49,26,2,'#6ed7ff'),
+  'LCD1602 I²C': rect(4,14,112,49,'#268358',4)+rect(12,22,96,31,chip)+rect(18,26,84,23,'#bddc73')+
+    '<text x="22" y="40" style="fill:#243819">Agua: 0/100</text>'+filaPines(16,17,18,5.4,oro)
+};
+const nav = document.getElementById('modulos');
+const svg = document.getElementById('esquema');
+const anterior = document.getElementById('anterior');
+const siguiente = document.getElementById('siguiente');
+let seleccionado = 0;
+const botones = modulos.map((modulo, i) => {
+  const boton = document.createElement('button');
+  boton.type = 'button';
+  boton.textContent = modulo.boton;
+  boton.addEventListener('click', () => mostrar(i,true));
+  nav.append(boton);
+  return boton;
+});
+function mostrar(i, animar) {
+  const m = modulos[i];
+  seleccionado = i;
+  anterior.disabled = i === 0;
+  siguiente.disabled = i === modulos.length-1;
+  document.getElementById('paso').textContent = 'MÓDULO '+(i+1)+' DE '+modulos.length;
+  botones.forEach((b,j) => b.setAttribute('aria-pressed', String(i===j)));
+  document.getElementById('titulo').textContent = m.titulo;
+  document.getElementById('detalle').textContent = m.detalle;
+  document.getElementById('cables').textContent = m.filas.map(([a,b]) => m.izq+' '+a+' a '+m.der+' '+b).join('. ') + '. ' + m.detalle;
+  const y = j => 146 + j*54;
+  const alto = y(m.filas.length-1)+30;
+  svg.setAttribute('viewBox', '0 0 480 '+alto);
+  const lados = [[4,m.izq],[320,m.der]];
+  svg.innerHTML = lados.map(([x,nombre]) =>
+    '<rect class="board" x="'+x+'" y="3" width="156" height="'+(alto-7)+'" rx="10"/>'+
+    '<text x="'+(x+78)+'" y="29" text-anchor="middle">'+nombre+'</text>'+
+    '<g class="part" transform="translate('+(x+18)+' 41)">'+partes[nombre]+'</g>'
+  ).join('') + m.filas.map(([a,b,tipo],j) =>
+    '<path class="wire" d="M160 '+y(j)+' H320" stroke="'+colores[tipo]+'"/>'+
+    (animar?'<path class="pulse" d="M160 '+y(j)+' H320"/>':'')+
+    '<circle cx="160" cy="'+y(j)+'" r="4" fill="'+colores[tipo]+'"/>'+
+    '<circle cx="320" cy="'+y(j)+'" r="4" fill="'+colores[tipo]+'"/>'+
+    '<text x="149" y="'+(y(j)+5)+'" text-anchor="end">'+a+'</text>'+
+    '<text x="331" y="'+(y(j)+5)+'">'+b+'</text>'
+  ).join('');
+  if (m.puente) {
+    const arriba = y(m.puente.a), abajo = y(m.puente.b);
+    svg.innerHTML += '<path class="wire" d="M230 '+arriba+' v10 l-6 4 12 5 -12 5 12 5 -12 5 6 4 V'+abajo+'" stroke="#ffd78e"/>'+
+      '<circle cx="230" cy="'+arriba+'" r="4" fill="#ffd78e"/>'+
+      '<circle cx="230" cy="'+abajo+'" r="4" fill="#ffd78e"/>'+
+      '<text x="243" y="'+((arriba+abajo)/2+5)+'">'+m.puente.valor+'</text>';
+  }
+}
+anterior.addEventListener('click', () => mostrar(seleccionado-1,true));
+siguiente.addEventListener('click', () => mostrar(seleccionado+1,true));
+document.getElementById('animar').addEventListener('click', () => mostrar(seleccionado,true));
+const agua = document.getElementById('agua');
+const anguloDemo = document.getElementById('angulo-demo');
+const lluvia = document.getElementById('lluvia');
+const invasionNido = document.getElementById('invasion-nido');
+const situaciones = {
+  seca:[0,0,false,'La sonda está fuera del agua. El LCD muestra el extremo seco de la calibración.'],
+  lluvia:[32,0,true,'El agua empieza a tocar las puntas. Aumenta el índice y la base conserva su posición.'],
+  crecida:[100,0,false,'La sonda alcanza la referencia mojada de la calibración. El índice llega a 100.'],
+  inclinacion:[0,15,false,'La base se inclina. Cambia el ángulo aunque la sonda siga seca.'],
+  invasion:[45,12,false,'Invasión del nido · origen indeterminado. En este ejemplo se inclina la base y la sonda entra en contacto con agua.']
+};
+const presets = Array.from(document.querySelectorAll('[data-escena]'));
+function actualizarEscena(texto) {
+  const indice = Number(agua.value), grados = Number(anguloDemo.value);
+  document.getElementById('nivel').style.transform = 'translateY('+(-.86*indice).toFixed(2)+'px)';
+  document.getElementById('soporte').style.transform = 'rotate('+grados+'deg)';
+  document.getElementById('lcd-demo').textContent = 'Angulo: '+grados.toFixed(1).padStart(4)+' deg\nAgua: '+indice+'/100';
+  document.getElementById('estado-demo').textContent = texto || 'Los controles separan la lectura de la sonda y la inclinación de la base.';
+}
+function elegirEscena(nombre) {
+  const [indice,grados,llueve,texto] = situaciones[nombre];
+  agua.value = indice;
+  anguloDemo.value = grados;
+  lluvia.classList.toggle('activa',llueve);
+  invasionNido.toggleAttribute('hidden', nombre !== 'invasion');
+  presets.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.escena===nombre)));
+  actualizarEscena(texto);
+}
+presets.forEach(b=>b.addEventListener('click',()=>elegirEscena(b.dataset.escena)));
+for (const control of [agua,anguloDemo]) {
+  control.addEventListener('input',()=>{
+    lluvia.classList.remove('activa');
+    invasionNido.toggleAttribute('hidden', true);
+    presets.forEach(b=>b.setAttribute('aria-pressed','false'));
+    actualizarEscena();
+  });
+}
+elegirEscena('seca');
+mostrar(0,false);
+</script>
+</html>
