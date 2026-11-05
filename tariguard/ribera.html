@@ -39,7 +39,9 @@ svg .pulse{fill:none;stroke:#fff;stroke-width:4;stroke-dasharray:9 200;animation
 .escena #soporte{transform-origin:441px 177px;transition:transform .55s ease}
 .escena #lluvia{opacity:0;transition:opacity .3s}
 .escena #lluvia.activa{opacity:.75;animation:gotas .72s linear infinite}
-.escena #invasion-nido[hidden]{display:none}
+.escena #invasion-nido[hidden],.escena #nido-inundado[hidden]{display:none}
+.escena #nido-inundado:not([hidden]){animation:entrada-agua .65s ease-out both}
+@keyframes entrada-agua{from{opacity:0}to{opacity:1}}
 .escena #invasion-nido:not([hidden]) ellipse{animation:marcar-nido .8s ease-out}
 @keyframes marcar-nido{from{stroke-width:9;opacity:.45}to{stroke-width:3;opacity:1}}
 @keyframes gotas{from{transform:translate(0,-13px)}to{transform:translate(-8px,12px)}}
@@ -49,7 +51,7 @@ svg .pulse{fill:none;stroke:#fff;stroke-width:4;stroke-dasharray:9 200;animation
 .estado{min-height:3em;margin:8px 0 0;color:#d1ead5}
 @media(max-width:560px){.sim-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.escena #nivel,.escena #soporte,.escena #lluvia{transition:none}.escena #lluvia.activa{animation:none}}
-@media(prefers-reduced-motion:reduce){.escena #invasion-nido:not([hidden]) ellipse{animation:none}}
+@media(prefers-reduced-motion:reduce){.escena #invasion-nido:not([hidden]) ellipse,.escena #nido-inundado:not([hidden]){animation:none}}
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.85rem;margin:12px 0}
 .legend span::before{content:"";display:inline-block;width:14px;height:3px;margin-right:6px;vertical-align:middle;background:var(--color)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
@@ -67,6 +69,7 @@ svg .pulse{fill:none;stroke:#fff;stroke-width:4;stroke-dasharray:9 200;animation
       <linearGradient id="cielo" x2="0" y2="1"><stop stop-color="#a8d9c7"/><stop offset="1" stop-color="#f1e0a7"/></linearGradient>
       <linearGradient id="rio" x2="0" y2="1"><stop stop-color="#55c3bd" stop-opacity=".8"/><stop offset="1" stop-color="#237e83" stop-opacity=".94"/></linearGradient>
       <clipPath id="borde-escena"><rect width="720" height="290" rx="10"/></clipPath>
+      <clipPath id="cavidad-nido"><path d="M267 198Q313 182 359 198L345 246Q313 270 282 245Z"/></clipPath>
     </defs>
     <g clip-path="url(#borde-escena)">
       <rect width="720" height="290" fill="url(#cielo)"/>
@@ -85,6 +88,16 @@ svg .pulse{fill:none;stroke:#fff;stroke-width:4;stroke-dasharray:9 200;animation
         <ellipse cx="35" cy="-6" rx="9" ry="6" fill="#7d9151"/><circle cx="39" cy="-8" r="1.5" fill="#142c1d"/>
       </g>
       <g id="nivel"><path d="M0 260Q36 247 72 258T144 258T216 258L240 270V460H0Z" fill="url(#rio)"/><path d="M0 260Q36 247 72 258T144 258T216 258" fill="none" stroke="#cdf6dc" stroke-width="3"/></g>
+      <g id="nido-inundado" hidden>
+        <path d="M200 188C236 179 256 184 277 198L290 220Q266 212 251 207L208 214Z" fill="#48aeb0"/>
+        <path d="M200 188C236 179 256 184 277 198L288 215" fill="none" stroke="#c7f6e8" stroke-width="2"/>
+        <g clip-path="url(#cavidad-nido)">
+          <path d="M259 208Q274 201 290 208T322 208T354 208T386 208V270H259Z" fill="#2a969b" fill-opacity=".8"/>
+          <path d="M259 208Q274 201 290 208T322 208T354 208T386 208M287 226q9-4 18 0m10 9q10-4 20 0" fill="none" stroke="#dbfff1" stroke-width="2"/>
+        </g>
+        <rect x="251" y="262" width="126" height="22" rx="8" fill="#ffe3a5"/>
+        <text x="314" y="278" text-anchor="middle">Nido inundado</text>
+      </g>
       <g stroke="#795139" stroke-width="2" fill="none"><path d="M205 205V231M313 179v14M469 144v15"/></g>
       <g><rect class="etiqueta" x="158" y="186" width="94" height="22" rx="8"/><text x="205" y="202" text-anchor="middle">Sonda YL-69</text><path d="M199 211v31m10-31v31" stroke="#3a5448" stroke-width="5" stroke-linecap="round"/><path d="M199 234v8m10-8v8" stroke="#ffe198" stroke-width="3"/></g>
       <g><rect class="etiqueta" x="263" y="158" width="100" height="23" rx="8"/><text x="313" y="174" text-anchor="middle">Nido ilustrado</text></g>
@@ -93,8 +106,8 @@ svg .pulse{fill:none;stroke:#fff;stroke-width:4;stroke-dasharray:9 200;animation
       <path id="lluvia" d="M64 41l-13 25m72-31l-13 25m77-18l-13 25m77-38l-13 25m77-18l-13 25m77-40l-13 25m77-11l-13 25m77-33l-13 25m77-12l-13 25m77-31l-13 25m77-16l-13 25M101 102l-13 25m131-40l-13 25m131-21l-13 25m131-29l-13 25m131-12l-13 25m131-37l-13 25" stroke="#efffff" stroke-width="3" stroke-linecap="round"/>
       <g id="invasion-nido" hidden>
         <ellipse cx="314" cy="225" rx="54" ry="41" fill="none" stroke="#ffdf83" stroke-width="3" stroke-dasharray="6 4"/>
-        <rect x="263" y="158" width="100" height="23" rx="8" fill="#ffdf83" stroke="#694b20"/>
-        <text x="313" y="174" text-anchor="middle">Invasión</text>
+        <rect x="243" y="158" width="140" height="23" rx="8" fill="#ffdf83" stroke="#694b20"/>
+        <text x="313" y="174" text-anchor="middle">Posible invasión</text>
       </g>
     </g>
   </svg>
@@ -115,7 +128,7 @@ svg .pulse{fill:none;stroke:#fff;stroke-width:4;stroke-dasharray:9 200;animation
     </div>
     <div class="pantalla"><h3>LCD1602 · SIMULACIÓN</h3><output id="lcd-demo" class="lcd" for="agua angulo-demo"></output></div>
   </div>
-  <p class="subtle">Escena didáctica. El índice 0–100 representa la respuesta relativa de una sonda calibrada. La altura del río y los valores son ilustrativos y no corresponden a umbrales de riesgo para el nido.</p>
+  <p class="subtle">Escena didáctica. El índice 0–100 representa la respuesta relativa de una sonda calibrada. Para mostrar los efectos, la simulación usa 80/100 como inicio de inundación y 5° como inicio del aviso de posible invasión. Son valores de demostración.</p>
 </section>
 <div class="step">02 · MONTAJE</div>
 <nav id="modulos" aria-label="Módulos"></nav>
@@ -242,27 +255,37 @@ const agua = document.getElementById('agua');
 const anguloDemo = document.getElementById('angulo-demo');
 const lluvia = document.getElementById('lluvia');
 const invasionNido = document.getElementById('invasion-nido');
+const nidoInundado = document.getElementById('nido-inundado');
+const umbralInundacion = 80;
+const umbralInclinacion = 5;
 const situaciones = {
   seca:[0,0,false,'La sonda está fuera del agua. El LCD muestra el extremo seco de la calibración.'],
   lluvia:[32,0,true,'El agua empieza a tocar las puntas. Aumenta el índice y la base conserva su posición.'],
-  crecida:[100,0,false,'La sonda alcanza la referencia mojada de la calibración. El índice llega a 100.'],
-  inclinacion:[0,15,false,'La base se inclina. Cambia el ángulo aunque la sonda siga seca.'],
-  invasion:[45,12,false,'Invasión del nido · origen indeterminado. En este ejemplo se inclina la base y la sonda entra en contacto con agua.']
+  crecida:[100,0,false],
+  inclinacion:[0,15,false],
+  invasion:[45,12,false]
 };
 const presets = Array.from(document.querySelectorAll('[data-escena]'));
 function actualizarEscena(texto) {
   const indice = Number(agua.value), grados = Number(anguloDemo.value);
+  const hayInundacion = indice >= umbralInundacion;
+  const hayInclinacion = grados >= umbralInclinacion;
+  nidoInundado.toggleAttribute('hidden', !hayInundacion);
+  invasionNido.toggleAttribute('hidden', !hayInclinacion);
   document.getElementById('nivel').style.transform = 'translateY('+(-.86*indice).toFixed(2)+'px)';
   document.getElementById('soporte').style.transform = 'rotate('+grados+'deg)';
   document.getElementById('lcd-demo').textContent = 'Angulo: '+grados.toFixed(1).padStart(4)+' deg\nAgua: '+indice+'/100';
-  document.getElementById('estado-demo').textContent = texto || 'Los controles separan la lectura de la sonda y la inclinación de la base.';
+  const efectos = [];
+  if (hayInundacion) efectos.push('Daño al nido por inundación. El agua entra en la cavidad y cubre los huevos.');
+  else if (indice > 0 && !texto) efectos.push('La sonda entra en contacto con agua. La cavidad sigue seca.');
+  if (hayInclinacion) efectos.push('Posible invasión · origen indeterminado. La micro:bit registra un cambio en el ángulo de la base.');
+  document.getElementById('estado-demo').textContent = [texto,...efectos].filter(Boolean).join(' ') || 'Sonda seca y base estable.';
 }
 function elegirEscena(nombre) {
   const [indice,grados,llueve,texto] = situaciones[nombre];
   agua.value = indice;
   anguloDemo.value = grados;
   lluvia.classList.toggle('activa',llueve);
-  invasionNido.toggleAttribute('hidden', nombre !== 'invasion');
   presets.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.escena===nombre)));
   actualizarEscena(texto);
 }
@@ -270,7 +293,6 @@ presets.forEach(b=>b.addEventListener('click',()=>elegirEscena(b.dataset.escena)
 for (const control of [agua,anguloDemo]) {
   control.addEventListener('input',()=>{
     lluvia.classList.remove('activa');
-    invasionNido.toggleAttribute('hidden', true);
     presets.forEach(b=>b.setAttribute('aria-pressed','false'));
     actualizarEscena();
   });
