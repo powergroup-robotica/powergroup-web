@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TariGuard · Lecturas en vivo</title>
-<link rel="stylesheet" href="panel.css?v=5">
+<link rel="stylesheet" href="panel.css?v=6">
 <main>
   <header><a href="../index.html#tariguard">← Power Group</a><span>POWER GROUP · LICEO 6</span></header>
   <p class="eyebrow">TARIGUARD · PROTOTIPO</p>
@@ -39,7 +39,7 @@
   </section>
   <details><summary>Ajustar alertas</summary><div class="limites">
     <label>Agua · índice 0–100<input id="limite-agua" type="number" min="1" max="100" value="80"></label>
-    <label>Inclinación · grados<input id="limite-angulo" type="number" min="1" max="180" value="5"></label>
+    <label>Inclinación · avisar al superar estos grados<input id="limite-angulo" type="number" min="1" max="180" value="7"></label>
     <label class="check"><input id="activar-temperatura" type="checkbox">Avisar por temperatura alta del sustrato</label>
     <label>Temperatura máxima · °C<input id="limite-temperatura" type="number" min="-55" max="125" value="35" step="0.1"></label>
   </div><p>Los límites iniciales son para ensayos del prototipo. Ajusta los valores con asesoramiento antes de interpretar el riesgo de un nido real.</p></details>
@@ -60,5 +60,5 @@
   <section><h2>Registro de avisos</h2><ul id="historial"><li>Aún no hay avisos registrados.</li></ul></section>
   <footer><a href="ribera.html" target="_blank" rel="noopener noreferrer">Abrir la simulación de la ribera ↗</a><span>Lecturas reales por USB · pH identificado como simulado</span></footer>
 </main>
-<script type="module" src="panel.mjs?v=5"></script>
+<script type="module" src="panel.mjs?v=6"></script>
 </html>

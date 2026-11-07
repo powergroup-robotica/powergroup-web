@@ -1,4 +1,4 @@
-import {leerPaquete, obtenerAlertas, leerMicrobitEnArduino, describirAgua} from './telemetria.mjs?v=4';
+import {leerPaquete, obtenerAlertas, leerMicrobitEnArduino, describirAgua} from './telemetria.mjs?v=6';
 
 const elemento = id => document.getElementById(id);
 const fuentes = {
@@ -66,7 +66,7 @@ function actualizar() {
   valor('ph', arduino?.ph, '');
   const avisos = obtenerAlertas(arduino, microbit, {
     agua:limite('limite-agua', 80),
-    angulo:limite('limite-angulo', 5),
+    angulo:limite('limite-angulo', 7),
     temperatura:elemento('activar-temperatura').checked,
     maxima:limite('limite-temperatura', 35)
   });

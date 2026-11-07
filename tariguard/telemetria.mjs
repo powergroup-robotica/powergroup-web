@@ -39,7 +39,7 @@ export function obtenerAlertas(arduino, microbit, limites) {
   if (arduino?.agua !== null && arduino?.agua >= limites.agua) {
     avisos.push({id:'agua', texto:'Presencia elevada de agua. Revisar el nido de prueba.'});
   }
-  if (microbit?.angulo >= limites.angulo) {
+  if (microbit?.angulo > limites.angulo) {
     avisos.push({id:'angulo', texto:'Posible invasión · origen indeterminado. Se detectó inclinación.'});
   }
   if (limites.temperatura && arduino?.sustrato !== null &&

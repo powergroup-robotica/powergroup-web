@@ -128,7 +128,7 @@ svg .pulse{fill:none;stroke:#fff;stroke-width:4;stroke-dasharray:9 200;animation
     </div>
     <div class="pantalla"><h3>LCD1602 · SIMULACIÓN</h3><output id="lcd-demo" class="lcd" for="agua angulo-demo"></output></div>
   </div>
-  <p class="subtle">Escena didáctica. El índice 0–100 representa la respuesta relativa de una sonda calibrada. Para mostrar los efectos, la simulación usa 80/100 como inicio de inundación y 5° como inicio del aviso de posible invasión. Son valores de demostración.</p>
+  <p class="subtle">Escena didáctica. El índice 0–100 representa la respuesta relativa de una sonda calibrada. Para mostrar los efectos, la simulación usa 80/100 como inicio de inundación y un ángulo mayor de 7° para el aviso de posible invasión. Son valores de demostración.</p>
 </section>
 <div class="step">02 · MONTAJE</div>
 <nav id="modulos" aria-label="Módulos"></nav>
@@ -257,7 +257,7 @@ const lluvia = document.getElementById('lluvia');
 const invasionNido = document.getElementById('invasion-nido');
 const nidoInundado = document.getElementById('nido-inundado');
 const umbralInundacion = 80;
-const umbralInclinacion = 5;
+const umbralInclinacion = 7;
 const situaciones = {
   seca:[0,0,false,'La sonda está fuera del agua. El LCD muestra el extremo seco de la calibración.'],
   lluvia:[32,0,true,'El agua empieza a tocar las puntas. Aumenta el índice y la base conserva su posición.'],
@@ -269,7 +269,7 @@ const presets = Array.from(document.querySelectorAll('[data-escena]'));
 function actualizarEscena(texto) {
   const indice = Number(agua.value), grados = Number(anguloDemo.value);
   const hayInundacion = indice >= umbralInundacion;
-  const hayInclinacion = grados >= umbralInclinacion;
+  const hayInclinacion = grados > umbralInclinacion;
   nidoInundado.toggleAttribute('hidden', !hayInundacion);
   invasionNido.toggleAttribute('hidden', !hayInclinacion);
   document.getElementById('nivel').style.transform = 'translateY('+(-.86*indice).toFixed(2)+'px)';
