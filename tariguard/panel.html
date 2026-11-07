@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TariGuard · Lecturas en vivo</title>
-<link rel="stylesheet" href="panel.css?v=4">
+<link rel="stylesheet" href="panel.css?v=5">
 <main>
   <header><a href="../index.html#tariguard">← Power Group</a><span>POWER GROUP · LICEO 6</span></header>
   <p class="eyebrow">TARIGUARD · PROTOTIPO</p>
@@ -15,18 +15,19 @@
     <section><h2>2 · micro:bit receptora USB</h2><p id="estado-M" role="status">Sin conectar</p><button id="conectar-M">Conectar micro:bit</button><button id="desconectar-M" class="secundario" disabled>Desconectar</button></section>
   </div>
   <p id="origen-microbit" role="status">Esperando lecturas de inclinación y YL-69.</p>
-  <section class="avisos"><div class="fila"><h2>Alertas del prototipo</h2><button class="secundario" id="sonido" aria-pressed="false">Activar sonido</button></div><div id="alertas" role="status" aria-live="polite">Esperando lecturas de los dos dispositivos.</div></section>
+  <section class="avisos" id="panel-alertas"><div class="fila"><h2>Alertas del prototipo</h2><button class="secundario" id="sonido" aria-pressed="false">Activar sonido</button></div><div id="alertas" role="status" aria-live="polite">Esperando lecturas de los dos dispositivos.</div></section>
   <div class="medidas">
-    <article><span>Temperatura del aire</span><strong id="aire">—</strong><small>DHT22 · Arduino</small></article>
-    <article><span>Humedad del aire</span><strong id="humedad">—</strong><small>DHT22 · % HR</small></article>
-    <article><span>Temperatura del sustrato</span><strong id="sustrato">—</strong><small>DS18B20 · Arduino</small></article>
-    <article class="tarjeta-agua"><span>Presencia de agua · sonda YL-69</span>
+    <article id="tarjeta-aire"><span>Temperatura del aire</span><strong id="aire">—</strong><small>DHT22 · Arduino</small><small id="aviso-aire" class="estado-alerta" hidden>ATENCIÓN · revisar sensor</small></article>
+    <article id="tarjeta-humedad"><span>Humedad del aire</span><strong id="humedad">—</strong><small>DHT22 · % HR</small><small id="aviso-humedad" class="estado-alerta" hidden>ATENCIÓN · revisar sensor</small></article>
+    <article id="tarjeta-sustrato"><span>Temperatura del sustrato</span><strong id="sustrato">—</strong><small>DS18B20 · Arduino</small><small id="aviso-sustrato" class="estado-alerta" hidden>ATENCIÓN · revisar aviso</small></article>
+    <article class="tarjeta-agua" id="tarjeta-agua"><span>Presencia de agua · sonda YL-69</span>
       <strong id="estado-agua" class="estado-agua">Esperando lectura</strong>
       <div class="fila"><span>Seco</span><strong id="agua" class="indice-agua">—</strong><span>Mojado</span></div>
       <meter id="barra-agua" min="0" max="100" value="0" aria-label="Contacto relativo de la sonda con el agua" hidden></meter>
       <small id="explicacion-agua">Conecta las placas y calibra la sonda en seco y mojado.</small>
+      <small id="aviso-agua" class="estado-alerta" hidden>ATENCIÓN · revisar aviso</small>
     </article>
-    <article><span>Inclinación</span><strong id="angulo">—</strong><small>micro:bit del prototipo</small></article>
+    <article id="tarjeta-angulo"><span>Inclinación</span><strong id="angulo">—</strong><small>micro:bit del prototipo</small><small id="aviso-angulo" class="estado-alerta" hidden>ALERTA · posible invasión</small></article>
     <article class="simulado"><span>pH · SIMULADO</span><strong id="ph">—</strong><small>Dato de demostración generado por Arduino</small></article>
   </div>
   <section>
@@ -59,5 +60,5 @@
   <section><h2>Registro de avisos</h2><ul id="historial"><li>Aún no hay avisos registrados.</li></ul></section>
   <footer><a href="ribera.html" target="_blank" rel="noopener noreferrer">Abrir la simulación de la ribera ↗</a><span>Lecturas reales por USB · pH identificado como simulado</span></footer>
 </main>
-<script type="module" src="panel.mjs?v=4"></script>
+<script type="module" src="panel.mjs?v=5"></script>
 </html>

@@ -6,6 +6,7 @@ const fuentes = {
   M:{port:null, reader:null, writer:null, muestra:null, ultimo:0, cerrando:false, abriendo:false, ultimaLinea:0, receptora:0, diagnostico:''}
 };
 const caducidad = 9000;
+const intervaloSonido = 3000;
 let audio = null;
 let sonidoActivo = false;
 let ultimoSonido = 0;
@@ -92,6 +93,17 @@ function actualizar() {
     if (arduino.sustrato === null) avisos.push({id:'ds',texto:'DS18B20 sin lectura válida. Revisar sensor de sustrato.'});
     if (arduino.agua === null) avisos.push({id:'cal',texto:'Agua sin índice disponible. Revisar la recepción y completar la calibración.'});
   }
+  const idsAvisos = new Set(avisos.map(aviso => aviso.id));
+  elemento('panel-alertas').classList.toggle('alerta-activa', avisos.length > 0);
+  const tarjetas = {
+    aire:['dht'], humedad:['dht'], sustrato:['calor','ds'],
+    agua:['agua','cal'], angulo:['angulo']
+  };
+  for (const [tarjeta, ids] of Object.entries(tarjetas)) {
+    const activa = ids.some(id => idsAvisos.has(id));
+    elemento('tarjeta-' + tarjeta).classList.toggle('alerta-activa', activa);
+    elemento('aviso-' + tarjeta).hidden = !activa;
+  }
   const contenedor = elemento('alertas');
   contenedor.replaceChildren();
   if (avisos.length) {
@@ -108,7 +120,7 @@ function actualizar() {
       'Esperando conectar los dos dispositivos para completar el panel.';
   }
   avisosPrevios = new Set(avisos.map(aviso => aviso.id));
-  if (sonidoActivo && avisos.length && Date.now() - ultimoSonido > 10000) emitirSonido();
+  if (sonidoActivo && avisos.length && Date.now() - ultimoSonido >= intervaloSonido) emitirSonido();
 }
 
 function emitirSonido() {
