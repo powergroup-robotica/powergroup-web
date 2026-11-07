@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TariGuard · Lecturas en vivo</title>
+<link rel="stylesheet" href="panel.css">
+<main>
+  <header><a href="../index.html#tariguard">← Power Group</a><span>POWER GROUP · LICEO 6</span></header>
+  <p class="eyebrow">TARIGUARD · PROTOTIPO</p>
+  <h1>El nido, en vivo.</h1>
+  <p class="intro">Temperaturas y humedad por USB del Arduino. Inclinación y sonda YL-69 por radio entre las dos micro:bit.</p>
+  <div class="notice" id="soporte">Abre esta página en Chrome o Edge de escritorio. Cierra los monitores serie de Arduino y del editor de micro:bit antes de conectar.</div>
+  <div class="conexiones">
+    <section><h2>1 · Arduino USB</h2><p id="estado-A" role="status">Sin conectar</p><button id="conectar-A">Conectar Arduino</button><button id="desconectar-A" class="secundario" disabled>Desconectar</button></section>
+    <section><h2>2 · micro:bit receptora USB</h2><p id="estado-M" role="status">Sin conectar</p><button id="conectar-M">Conectar micro:bit</button><button id="desconectar-M" class="secundario" disabled>Desconectar</button></section>
+  </div>
+  <section class="avisos"><div class="fila"><h2>Alertas del prototipo</h2><button class="secundario" id="sonido" aria-pressed="false">Activar sonido</button></div><div id="alertas" role="status" aria-live="polite">Esperando lecturas de los dos dispositivos.</div></section>
+  <div class="medidas">
+    <article><span>Temperatura del aire</span><strong id="aire">—</strong><small>DHT22 · Arduino</small></article>
+    <article><span>Humedad del aire</span><strong id="humedad">—</strong><small>DHT22 · % HR</small></article>
+    <article><span>Temperatura del sustrato</span><strong id="sustrato">—</strong><small>DS18B20 · Arduino</small></article>
+    <article><span>Presencia de agua</span><strong id="agua">—</strong><small>Índice relativo calibrado · 0–100</small></article>
+    <article><span>Inclinación</span><strong id="angulo">—</strong><small>micro:bit del prototipo</small></article>
+    <article><span>Sonda YL-69</span><strong id="bruto">—</strong><small>Lectura bruta · 0–1023</small></article>
+    <article class="simulado"><span>pH · SIMULADO</span><strong id="ph">—</strong><small>Dato de demostración generado por Arduino</small></article>
+  </div>
+  <section>
+    <h2>Calibrar la presencia de agua</h2>
+    <p>Conecta el Arduino. Deja secar la sonda y registra «Seco». Luego moja solo las puntas, espera a que se estabilice la lectura y registra «Mojado». La calibración queda guardada en el Arduino.</p>
+    <div class="fila"><button id="seco" disabled>Registrar seco · 0</button><button id="mojado" disabled>Registrar mojado · 100</button></div>
+    <p id="calibracion" role="status">Los botones se habilitan al conectar el Arduino.</p>
+  </section>
+  <details><summary>Ajustar alertas</summary><div class="limites">
+    <label>Agua · índice 0–100<input id="limite-agua" type="number" min="1" max="100" value="80"></label>
+    <label>Inclinación · grados<input id="limite-angulo" type="number" min="1" max="180" value="5"></label>
+    <label class="check"><input id="activar-temperatura" type="checkbox">Avisar por temperatura alta del sustrato</label>
+    <label>Temperatura máxima · °C<input id="limite-temperatura" type="number" min="-55" max="125" value="35" step="0.1"></label>
+  </div><p>Los límites iniciales son para ensayos del prototipo. Ajusta los valores con asesoramiento antes de interpretar el riesgo de un nido real.</p></details>
+  <details open><summary>Preparar las placas</summary>
+    <ol>
+      <li>Arduino UNO conectado por USB con <a href="programas/TariGuardPanelUSB.ino" download>el programa completo TariGuardPanelUSB</a>. Conserva DHT22 en D4, DS18B20 en D2, OLED en A4/A5 y LCD1602 en D9/D8.</li>
+      <li>micro:bit del prototipo con <a href="programas/emisora.py" download>emisora.py</a>. Conserva YL-69 AO → P2, VCC → 3V y GND. P0 de esta micro:bit → D10 del Arduino y GND común. Deja D11 del Arduino libre. Esta micro:bit puede alimentarse con su portapilas.</li>
+      <li>Segunda micro:bit con <a href="programas/receptora.py" download>receptora.py</a>, conectada por USB a esta computadora. Mostrará R al esperar y ✓ al recibir.</li>
+      <li>Vuelve a esta página y conecta cada USB con su botón. El sistema pedirá seleccionar los puertos por separado.</li>
+    </ol>
+    <p>La página muestra los datos en esta computadora mientras está abierta. Para verlos desde otros dispositivos hará falta añadir sincronización en línea.</p>
+  </details>
+  <section><h2>Registro de avisos</h2><ul id="historial"><li>Aún no hay avisos registrados.</li></ul></section>
+  <footer><a href="ribera.html" target="_blank" rel="noopener noreferrer">Abrir la simulación de la ribera ↗</a><span>Lecturas reales por USB · pH identificado como simulado</span></footer>
+</main>
+<script type="module" src="panel.mjs"></script>
+</html>
