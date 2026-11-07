@@ -3,7 +3,7 @@ import {leerPaquete, obtenerAlertas} from './telemetria.mjs';
 const elemento = id => document.getElementById(id);
 const fuentes = {
   A:{port:null, reader:null, writer:null, muestra:null, ultimo:0, cerrando:false, abriendo:false, ultimaLinea:0},
-  M:{port:null, reader:null, writer:null, muestra:null, ultimo:0, cerrando:false, abriendo:false, ultimaLinea:0}
+  M:{port:null, reader:null, writer:null, muestra:null, ultimo:0, cerrando:false, abriendo:false, ultimaLinea:0, receptora:0, diagnostico:''}
 };
 const caducidad = 9000;
 let audio = null;
@@ -55,8 +55,17 @@ function actualizar() {
     const dato = datoReciente(origen);
     if (!fuente.port) continue;
     const edad = Math.floor((Date.now() - fuente.ultimo) / 1000);
+    let estado = 'Puerto abierto · esperando lecturas válidas';
+    if (origen === 'M') {
+      if (fuente.diagnostico) estado = fuente.diagnostico;
+      else if (Date.now() - fuente.receptora < 6000) {
+        estado = 'Receptora USB detectada · esperando radio de la emisora';
+      } else if (fuente.ultimaLinea && Date.now() - fuente.ultimaLinea < 6000) {
+        estado = 'Llegan mensajes USB · revisar programa de la receptora';
+      }
+    }
     elemento('estado-' + origen).textContent = dato ?
-      'Recibiendo · hace ' + edad + ' s' : 'Puerto abierto · esperando lecturas válidas';
+      'Recibiendo · hace ' + edad + ' s' : estado;
     if (!dato) avisos.push({id:'enlace-' + origen, texto:
       (origen === 'A' ? 'Arduino' : 'Radio micro:bit') + ' · sin lecturas recientes. Revisar el enlace y el programa.'});
   }
@@ -108,6 +117,18 @@ function botones(origen, ocupado) {
 }
 
 function procesar(linea, origen) {
+  fuentes[origen].ultimaLinea = Date.now();
+  if (origen === 'M') {
+    elemento('ultimo-mensaje-M').textContent = linea.slice(0,160) || '(línea vacía)';
+    if (/^TGSTATUS\|RECEPTORA\|\d+$/.test(linea) || linea === 'TARIGUARD_RECEPTORA_LISTA') {
+      fuentes.M.receptora = Date.now();
+      fuentes.M.diagnostico = '';
+    } else if (linea.startsWith('TG1|A|')) {
+      fuentes.M.diagnostico = 'Seleccionaste el Arduino. Desconecta este puerto y elige la micro:bit receptora.';
+    } else if (/Traceback|Error:/.test(linea)) {
+      fuentes.M.diagnostico = 'El programa de micro:bit informó un error. Consulta el diagnóstico de abajo.';
+    }
+  }
   if (origen === 'A' && /^(Seco registrado:|Calibracion|Lecturas casi iguales|Primero enviar)/.test(linea)) {
     elemento('calibracion').textContent = linea;
     registrar(linea);
@@ -115,6 +136,7 @@ function procesar(linea, origen) {
   const muestra = leerPaquete(linea, origen);
   if (!muestra) return;
   fuentes[origen].muestra = muestra;
+  if (origen === 'M') fuentes.M.diagnostico = '';
   fuentes[origen].ultimo = Date.now();
   actualizar();
 }
@@ -134,6 +156,12 @@ async function conectar(origen) {
     fuente.port = port;
     fuente.muestra = null;
     fuente.ultimo = 0;
+    fuente.ultimaLinea = 0;
+    if (origen === 'M') {
+      fuente.receptora = 0;
+      fuente.diagnostico = '';
+      elemento('ultimo-mensaje-M').textContent = 'Esperando mensajes del USB…';
+    }
     botones(origen, true);
     registrar((origen === 'A' ? 'Arduino' : 'micro:bit receptora') + ' conectado por USB.');
     const decoder = new TextDecoder();

@@ -11,10 +11,14 @@ radio.on()
 
 ultimo = -1
 recibidos = 0
+ultimo_estado = -2000
 display.show('R')
 print('TARIGUARD_RECEPTORA_LISTA')
 
 while True:
+    if running_time() - ultimo_estado >= 2000:
+        print('TGSTATUS|RECEPTORA|%d' % recibidos)
+        ultimo_estado = running_time()
     try:
         mensaje = radio.receive()
     except ValueError:
