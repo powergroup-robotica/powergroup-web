@@ -48,3 +48,11 @@ export function obtenerAlertas(arduino, microbit, limites) {
   }
   return avisos;
 }
+
+// El Arduino ya imprime las lecturas recibidas por el cable P0 -> D10.
+// Permite aprovechar ese recorrido cuando el USB de la receptora no entrega datos.
+export function leerMicrobitEnArduino(linea) {
+  const partes = /^Angulo: (-?\d+(?:\.\d+)?) grados \| Eventos: (\d+) \| Hum sustrato \(0-1023\): (\d+)$/.exec(linea.trim());
+  if (!partes) return null;
+  return leerPaquete('TG1|M|' + partes.slice(1).join('|'), 'M');
+}

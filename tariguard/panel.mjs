@@ -1,4 +1,4 @@
-import {leerPaquete, obtenerAlertas} from './telemetria.mjs';
+import {leerPaquete, obtenerAlertas, leerMicrobitEnArduino} from './telemetria.mjs?v=3';
 
 const elemento = id => document.getElementById(id);
 const fuentes = {
@@ -11,6 +11,8 @@ let sonidoActivo = false;
 let ultimoSonido = 0;
 let avisosPrevios = new Set();
 let huboRegistro = false;
+let microbitPorArduino = null;
+let ultimoMicrobitPorArduino = 0;
 
 function registrar(texto) {
   const lista = elemento('historial');
@@ -37,7 +39,14 @@ function valor(id, dato, unidad, decimales = 1) {
 }
 
 function actualizar() {
-  const arduino = datoReciente('A'), microbit = datoReciente('M');
+  const arduino = datoReciente('A'), porRadio = datoReciente('M');
+  const porCable = fuentes.A.port && Date.now() - ultimoMicrobitPorArduino <= caducidad ?
+    microbitPorArduino : null;
+  const microbit = porRadio || porCable;
+  elemento('origen-microbit').textContent = porRadio ?
+    'Inclinación y YL-69 recibidos por radio → USB de la receptora.' :
+    (porCable ? 'Inclinación y YL-69 recibidos por P0 → Arduino → USB.' :
+      'Esperando lecturas de inclinación y YL-69.');
   valor('aire', arduino?.aire, ' °C');
   valor('humedad', arduino?.humedad, ' %');
   valor('sustrato', arduino?.sustrato, ' °C');
@@ -66,7 +75,7 @@ function actualizar() {
     }
     elemento('estado-' + origen).textContent = dato ?
       'Recibiendo · hace ' + edad + ' s' : estado;
-    if (!dato) avisos.push({id:'enlace-' + origen, texto:
+    if (!dato && !(origen === 'M' && porCable)) avisos.push({id:'enlace-' + origen, texto:
       (origen === 'A' ? 'Arduino' : 'Radio micro:bit') + ' · sin lecturas recientes. Revisar el enlace y el programa.'});
   }
   if (arduino) {
@@ -118,6 +127,14 @@ function botones(origen, ocupado) {
 
 function procesar(linea, origen) {
   fuentes[origen].ultimaLinea = Date.now();
+  if (origen === 'A') {
+    const lectura = leerMicrobitEnArduino(linea);
+    if (lectura) {
+      microbitPorArduino = lectura;
+      ultimoMicrobitPorArduino = Date.now();
+      actualizar();
+    }
+  }
   if (origen === 'M') {
     elemento('ultimo-mensaje-M').textContent = linea.slice(0,160) || '(línea vacía)';
     if (/^TGSTATUS\|RECEPTORA\|\d+$/.test(linea) || linea === 'TARIGUARD_RECEPTORA_LISTA') {
