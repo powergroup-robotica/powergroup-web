@@ -56,3 +56,23 @@ export function leerMicrobitEnArduino(linea) {
   if (!partes) return null;
   return leerPaquete('TG1|M|' + partes.slice(1).join('|'), 'M');
 }
+
+export function describirAgua(indice, limite) {
+  if (indice === null || indice === undefined) return null;
+  if (indice >= limite) return {
+    estado:'Agua elevada',
+    explicacion:'La sonda alcanzó el nivel de aviso configurado. Revisar el nido de prueba.'
+  };
+  if (indice <= 10) return {
+    estado:'Seco o casi seco',
+    explicacion:'La lectura está cerca de la referencia que registraste con la sonda seca.'
+  };
+  if (indice < 50) return {
+    estado:'Poco contacto con agua',
+    explicacion:'La sonda detecta un cambio respecto a su referencia seca.'
+  };
+  return {
+    estado:'Mayor contacto con agua',
+    explicacion:'La lectura se acerca a la referencia mojada. Todavía está debajo del aviso configurado.'
+  };
+}

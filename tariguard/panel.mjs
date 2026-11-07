@@ -1,4 +1,4 @@
-import {leerPaquete, obtenerAlertas, leerMicrobitEnArduino} from './telemetria.mjs?v=3';
+import {leerPaquete, obtenerAlertas, leerMicrobitEnArduino, describirAgua} from './telemetria.mjs?v=4';
 
 const elemento = id => document.getElementById(id);
 const fuentes = {
@@ -51,6 +51,15 @@ function actualizar() {
   valor('humedad', arduino?.humedad, ' %');
   valor('sustrato', arduino?.sustrato, ' °C');
   valor('agua', arduino?.agua, '/100', 0);
+  const descripcion = describirAgua(arduino?.agua, limite('limite-agua',80));
+  const barra = elemento('barra-agua');
+  barra.hidden = !descripcion;
+  if (descripcion) barra.value = arduino.agua;
+  elemento('estado-agua').textContent = descripcion ? descripcion.estado :
+    (microbit || arduino ? 'Calibrar o revisar sonda' : 'Esperando lectura');
+  elemento('explicacion-agua').textContent = descripcion ? descripcion.explicacion :
+    (microbit || arduino ? 'Registra la referencia seca y luego la mojada con los botones de calibración.' :
+      'Conecta las placas para recibir la lectura.');
   valor('angulo', microbit?.angulo, '°');
   valor('bruto', microbit?.bruto, '', 0);
   valor('ph', arduino?.ph, '');

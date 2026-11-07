@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TariGuard · Lecturas en vivo</title>
-<link rel="stylesheet" href="panel.css">
+<link rel="stylesheet" href="panel.css?v=4">
 <main>
   <header><a href="../index.html#tariguard">← Power Group</a><span>POWER GROUP · LICEO 6</span></header>
   <p class="eyebrow">TARIGUARD · PROTOTIPO</p>
@@ -20,14 +20,19 @@
     <article><span>Temperatura del aire</span><strong id="aire">—</strong><small>DHT22 · Arduino</small></article>
     <article><span>Humedad del aire</span><strong id="humedad">—</strong><small>DHT22 · % HR</small></article>
     <article><span>Temperatura del sustrato</span><strong id="sustrato">—</strong><small>DS18B20 · Arduino</small></article>
-    <article><span>Presencia de agua</span><strong id="agua">—</strong><small>Índice relativo calibrado · 0–100</small></article>
+    <article class="tarjeta-agua"><span>Presencia de agua · sonda YL-69</span>
+      <strong id="estado-agua" class="estado-agua">Esperando lectura</strong>
+      <div class="fila"><span>Seco</span><strong id="agua" class="indice-agua">—</strong><span>Mojado</span></div>
+      <meter id="barra-agua" min="0" max="100" value="0" aria-label="Contacto relativo de la sonda con el agua" hidden></meter>
+      <small id="explicacion-agua">Conecta las placas y calibra la sonda en seco y mojado.</small>
+    </article>
     <article><span>Inclinación</span><strong id="angulo">—</strong><small>micro:bit del prototipo</small></article>
-    <article><span>Sonda YL-69</span><strong id="bruto">—</strong><small>Lectura bruta · 0–1023</small></article>
     <article class="simulado"><span>pH · SIMULADO</span><strong id="ph">—</strong><small>Dato de demostración generado por Arduino</small></article>
   </div>
   <section>
     <h2>Calibrar la presencia de agua</h2>
     <p>Conecta el Arduino. Deja secar la sonda y registra «Seco». Luego moja solo las puntas, espera a que se estabilice la lectura y registra «Mojado». La calibración queda guardada en el Arduino.</p>
+    <p>La barra compara la lectura con esas dos referencias. 0 es la referencia seca y 100 es la mojada. La escala expresa el contacto relativo de la sonda con agua, no un porcentaje de humedad del terreno.</p>
     <div class="fila"><button id="seco" disabled>Registrar seco · 0</button><button id="mojado" disabled>Registrar mojado · 100</button></div>
     <p id="calibracion" role="status">Los botones se habilitan al conectar el Arduino.</p>
   </section>
@@ -47,11 +52,12 @@
     <p>La página muestra los datos en esta computadora mientras está abierta. Para verlos desde otros dispositivos hará falta añadir sincronización en línea.</p>
   </details>
   <details><summary>Diagnóstico de la micro:bit receptora</summary>
+    <p>Lectura técnica del YL-69 · <strong id="bruto">—</strong> de 1023</p>
     <p>Último mensaje recibido por USB</p><pre id="ultimo-mensaje-M" style="white-space:pre-wrap;overflow-wrap:anywhere">Todavía no llegaron mensajes.</pre>
     <p>R en la receptora indica espera de radio. ✓ indica recepción. Si aparece un error en la matriz, vuelve a cargar el programa receptor.</p>
   </details>
   <section><h2>Registro de avisos</h2><ul id="historial"><li>Aún no hay avisos registrados.</li></ul></section>
   <footer><a href="ribera.html" target="_blank" rel="noopener noreferrer">Abrir la simulación de la ribera ↗</a><span>Lecturas reales por USB · pH identificado como simulado</span></footer>
 </main>
-<script type="module" src="panel.mjs?v=3"></script>
+<script type="module" src="panel.mjs?v=4"></script>
 </html>
