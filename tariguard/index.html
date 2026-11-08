@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TariGuard y las taricayas | Proyecto FLL de Power Group</title>
+<meta name="description" content="TariGuard, proyecto escolar de Power Group del Liceo 6 de Rivera, Uruguay. Prototipo de monitoreo de nidos de taricaya con sensores, alertas y simulación.">
+<link rel="canonical" href="https://powergroup-robotica.github.io/powergroup-web/tariguard/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TariGuard · Taricayas, tecnología y Power Group">
+<meta property="og:description" content="Conocé el proyecto escolar de monitoreo de nidos de taricaya del equipo Power Group.">
+<meta property="og:url" content="https://powergroup-robotica.github.io/powergroup-web/tariguard/">
+<meta property="og:image" content="https://powergroup-robotica.github.io/powergroup-web/assets/tariguard-amazonia.png">
+<link rel="icon" href="../assets/logo.jpg">
+<style>
+:root{color-scheme:dark;color:#f1f4e4;background:#10231c;font-family:system-ui,sans-serif}*{box-sizing:border-box}body{margin:0}main{max-width:1060px;margin:auto;padding:28px clamp(18px,5vw,50px) 50px}a{color:#c7e9a7;text-underline-offset:4px}header,nav,.botones{display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:space-between}header{font-weight:700}header img{width:58px;height:58px;object-fit:contain;border-radius:8px;background:white}.marca{display:flex;gap:14px;align-items:center}h1{font-size:clamp(2.8rem,8vw,5rem);line-height:1.05;letter-spacing:-.04em;margin:16px 0}h2{font-size:1.5rem;margin:0 0 15px}p,li{line-height:1.7}p{color:#d0e0d3}.entrada{padding:48px 0 30px;max-width:800px}.entrada small{color:#d8eaa6;letter-spacing:.12em;font-weight:750}.entrada p{font-size:1.15rem}.botones{justify-content:flex-start}.botones a{background:#c7e9a7;color:#152c20;font-weight:700;padding:12px 18px;border-radius:8px;text-decoration:none}.botones a:hover{background:#e2f5b7}.foto{width:100%;max-height:360px;object-fit:cover;object-position:center 45%;border-radius:15px}.pie{font-size:.8rem;margin:5px 0 28px}.bloque{padding:28px 0;border-bottom:1px solid #3c5b46}.tarjetas{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.tarjetas article{padding:20px;background:#1d3b2a;border-radius:12px}.tarjetas h3{margin-top:0}.fuentes{padding-left:22px}footer{margin-top:35px;font-size:.85rem;color:#c3d8c8}a:focus-visible{outline:3px solid #ffe9a6;outline-offset:5px}
+</style>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebPage",
+  "name":"TariGuard y las taricayas · Power Group",
+  "url":"https://powergroup-robotica.github.io/powergroup-web/tariguard/",
+  "inLanguage":"es",
+  "description":"Proyecto escolar de Power Group sobre monitoreo de nidos de taricaya.",
+  "isPartOf":{"@type":"WebSite","name":"Power Group","url":"https://powergroup-robotica.github.io/powergroup-web/"},
+  "mainEntity":{
+    "@type":"CreativeWork",
+    "name":"TariGuard",
+    "description":"Prototipo escolar para explorar el monitoreo de nidos de taricaya mediante sensores y alertas.",
+    "keywords":["taricaya","Podocnemis unifilis","robótica educativa","FIRST LEGO League"],
+    "creator":{"@type":"Organization","name":"Power Group","alternateName":"Powergroup","url":"https://powergroup-robotica.github.io/powergroup-web/"}
+  }
+}
+</script>
+</head>
+<body>
+<main>
+  <header><div class="marca"><img src="../assets/logo.jpg" alt="Power Group"><span>POWER GROUP · LICEO 6</span></div><a href="../">Volver a Power Group</a></header>
+  <div class="entrada"><small>FIRST LEGO LEAGUE · PROYECTO ESCOLAR</small><h1>TariGuard y las taricayas.</h1>
+    <p>Somos <strong>Power Group</strong>, equipo de robótica del <strong>Liceo N.º 6 de Rivera, Uruguay</strong>. Con TariGuard investigamos cómo aportar información a quienes cuidan los nidos de taricaya, <em>Podocnemis unifilis</em>.</p>
+    <nav class="botones" aria-label="Explorar TariGuard"><a href="panel.html">Abrir monitor de sensores</a><a href="ribera.html">Explorar la simulación</a></nav>
+  </div>
+  <img class="foto" src="../assets/tariguard-amazonia.png" alt="Ilustración conceptual de una taricaya en el entorno amazónico" width="1024" height="1024">
+  <p class="pie">Imagen conceptual generada con IA para el proyecto.</p>
+  <section class="bloque"><h2>Qué problema investigamos</h2>
+    <p>Estudiamos los cambios que pueden afectar un sitio de anidación y la información que necesitan las personas que lo vigilan. Nuestro prototipo escolar explora el registro de inclinación, presencia de agua y condiciones ambientales en una maqueta.</p>
+    <p>La investigación reúne fuentes documentales, consultas a especialistas y el trabajo de construcción y programación del equipo. Consideramos antecedentes tecnológicos como TurtleSense y NEST, y experiencias de conservación comunitaria de la Amazonia.</p>
+  </section>
+  <section class="bloque"><h2>Qué mide el prototipo TariGuard</h2><div class="tarjetas">
+    <article><h3>Temperatura y humedad</h3><p>El DHT22 registra temperatura y humedad del aire. El DS18B20 registra la temperatura del sustrato.</p></article>
+    <article><h3>Presencia de agua</h3><p>La sonda YL-69 se calibra con referencias seca y mojada. El panel presenta una barra y estados explicados para interpretar la lectura relativa.</p></article>
+    <article><h3>Inclinación</h3><p>La micro:bit registra el ángulo respecto a una posición inicial. El panel puede emitir un aviso de posible invasión de origen indeterminado cuando se supera el límite configurado.</p></article>
+  </div></section>
+  <section class="bloque"><h2>De la maqueta al panel web</h2>
+    <p>El montaje combina Arduino UNO, dos micro:bit, pantallas locales y una computadora. El monitor recibe información por USB y por el enlace de radio entre las micro:bit. Durante las pruebas se añadieron una vía alternativa de lectura y mensajes de diagnóstico para identificar problemas de recepción.</p>
+    <p>Las alertas se destacan en rojo y pueden emitir sonido mientras el panel está abierto. El límite de inclinación inicial permite hasta 7° inclusive. Los valores se configuran para los ensayos escolares. El dato de pH está identificado como simulado.</p>
+  </section>
+  <section class="bloque"><h2>Dos lugares de referencia en la Amazonia</h2>
+    <p>La demostración permite elegir una referencia en el río Caquetá, Colombia, y otra en la zona del lago Musa Karusha o Rimachi, Perú. El mapa identifica las coordenadas como posiciones GPS simuladas de nidos de prueba.</p>
+    <ubicacion-tariguard></ubicacion-tariguard>
+  </section>
+  <section class="bloque"><h2>Avances y próximos pasos</h2>
+    <p>Construimos el montaje, programamos los sensores y desarrollamos el monitor y la simulación. El equipo revisa las lecturas, la calibración y la claridad de las alertas. Los ensayos repetidos, la medición de falsas alarmas y la validación para una aplicación en campo forman parte de los siguientes pasos.</p>
+    <p>El documento de investigación incluye los antecedentes, las consultas, el índice paginado y los anexos de montaje, evidencias y materiales de consulta.</p>
+    <ul class="fuentes">
+      <li><a href="https://www.canva.com/design/DAHZVXwuhDQ/r-Wg2uYdMoXOPW84A0ZG5A/view" target="_blank" rel="noopener noreferrer">Leer el proyecto TariGuard</a></li>
+      <li><a href="../docs/manual-taricayas.pdf" target="_blank" rel="noopener noreferrer">Manual de taricayas compartido en el proyecto</a></li>
+      <li><a href="https://powergroup-robotica.github.io/tariguard-kanban/" target="_blank" rel="noopener noreferrer">Kanban del equipo Power Group</a></li>
+      <li><a href="https://www.instagram.com/powergroup_2026/" target="_blank" rel="noopener noreferrer">Instagram de Power Group</a></li>
+    </ul>
+  </section>
+  <footer>Power Group · Robótica educativa · Liceo N.º 6 de Rivera · Uruguay</footer>
+</main>
+<script type="module" src="nidos-ui.mjs?v=1"></script>
+</body>
+</html>
