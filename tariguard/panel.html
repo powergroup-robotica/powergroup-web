@@ -30,6 +30,7 @@
     <article id="tarjeta-angulo"><span>Inclinación</span><strong id="angulo">—</strong><small>micro:bit del prototipo</small><small id="aviso-angulo" class="estado-alerta" hidden>ALERTA · posible invasión</small></article>
     <article class="simulado"><span>pH · SIMULADO</span><strong id="ph">—</strong><small>Dato de demostración generado por Arduino</small></article>
   </div>
+  <ubicacion-tariguard monitor></ubicacion-tariguard>
   <section>
     <h2>Calibrar la presencia de agua</h2>
     <p>Conecta el Arduino. Deja secar la sonda y registra «Seco». Luego moja solo las puntas, espera a que se estabilice la lectura y registra «Mojado». La calibración queda guardada en el Arduino.</p>
@@ -60,5 +61,6 @@
   <section><h2>Registro de avisos</h2><ul id="historial"><li>Aún no hay avisos registrados.</li></ul></section>
   <footer><a href="ribera.html" target="_blank" rel="noopener noreferrer">Abrir la simulación de la ribera ↗</a><span>Lecturas reales por USB · pH identificado como simulado</span></footer>
 </main>
+<script type="module" src="nidos-ui.mjs?v=1"></script>
 <script type="module" src="panel.mjs?v=6"></script>
 </html>
